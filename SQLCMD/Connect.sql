@@ -1,0 +1,12 @@
+
+
+
+:connect 192.168.100.164\AP -U hantochow -P P4WvcoEFVkkxMF9G4EzA
+
+SELECT @@SERVERNAME
+
+GO
+
+:connect 192.168.100.164\KC -U hantochow -P P4WvcoEFVkkxMF9G4EzA
+
+SELECT @@SERVERNAME
