@@ -11,9 +11,9 @@ GO
 
 --  Declaring and setting the variables
 
-DECLARE @account_name sysname 					= 'APP4$CEEMa Mandrill'					-- E.g: DB12 KC_PROD
+DECLARE @account_name sysname 					= 'APP4$JDE2012 Mandrill'					-- E.g: DB12 KC_PROD
 ,		@displayname nvarchar(128) 				= 'Retail Insight Notifications'		-- Leave Retail Insight Notifications
-,		@acc_desc nvarchar(256) 				= 'APP4$CEEMa Mandril Mail'				-- E.g: KC_Production
+,		@acc_desc nvarchar(256) 				= 'APP4$JDE2012 Mandril Mail'				-- E.g: KC_Production
 ,		@prf_desc nvarchar(256) 				= 'Mandril DB Mail Profile'				-- E.g: KC_Production
 	
 
@@ -26,7 +26,7 @@ DECLARE @account_name sysname 					= 'APP4$CEEMa Mandrill'					-- E.g: DB12 KC_P
 ,		@use_default_credentials sysname		=  0 
 ,		@enable_ssl	bit							=  1 
 
-,		@profile_name sysname 					= 'APP4$CEEMa Mandrill Profile'					-- E.g: DB12 KC_PRD Database Mail
+,		@profile_name sysname 					= 'APP4$JDE2012 Mandrill Profile'					-- E.g: DB12 KC_PRD Database Mail
 
 ,		@email nvarchar(128)					= 'notifications@retailinsight.co.uk'	-- Must remain the same
 ,		@replyto_address nvarchar(128)			= 'noreply@retailinsight.co.uk'			-- Must remain the same
@@ -92,7 +92,7 @@ GO
 -- Pre-SQL2012 version
 --EXECUTE msdb.dbo.sp_set_sqlagent_properties 
 --	@email_save_in_sent_folder=1, 
---	email_profile= N'APP4$CEEMa Mandrill', 
+--	email_profile= N'APP4$JDE2012 Mandrill', 
 --	@use_databasemail=1
 --GO
 
@@ -118,11 +118,12 @@ GO
 --==================
 --Troubleshooting
 --==================
-select * from msdb.dbo.sysmail_log
-ORDER BY log_date desc
+select * from msdb.dbo.sysmail_allitems
+ORDER BY send_request_date desc
 
 
 
+ SELECT  * FROM msdb..sysmail_profile ORDER BY last_mod_datetime
 
 
 

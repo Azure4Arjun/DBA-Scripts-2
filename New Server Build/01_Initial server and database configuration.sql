@@ -21,8 +21,8 @@ GO
 EXEC sp_configure;
 EXEC sp_configure 'show advanced options',1;RECONFIGURE;
 EXEC sp_configure 'backup compression default',1;RECONFIGURE;
-EXEC sp_configure 'max degree of parallelism',5;RECONFIGURE;  -- If required
-EXEC sp_configure 'max server memory (MB)',20000;RECONFIGURE WITH OVERRIDE; 
+EXEC sp_configure 'max degree of parallelism',8;RECONFIGURE;  -- If required
+EXEC sp_configure 'max server memory (MB)',70000;RECONFIGURE WITH OVERRIDE; 
 
 
 
@@ -31,11 +31,11 @@ EXEC sp_configure 'max server memory (MB)',20000;RECONFIGURE WITH OVERRIDE;
 -- ==================
 USE [master]
 GO
-EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'DefaultData', REG_SZ, N'D:\MSSQL$SQL2012_2\Data'
+EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'DefaultData', REG_SZ, N'D:\MSSQL$CEEMa_PRD\Data'
 GO
-EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'DefaultLog', REG_SZ, N'D:\MSSQL$SQL2012_2\Log'
+EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'DefaultLog', REG_SZ, N'D:\MSSQL$CEEMa_PRD\Log'
 GO
-EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', REG_SZ, N'D:\MSSQL$SQL2012_2\Backup'
+EXEC xp_instance_regwrite N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', REG_SZ, N'D:\MSSQL$CEEMa_PRD\Backup'
 GO
 
 
@@ -81,8 +81,8 @@ alter database ReportServerTempDB modify file (name = 'ReportServerTempDB_log', 
 exec sp_helpdb tempdb;
 
 -- Move existing (if not in correct location)
-ALTER DATABASE tempdb MODIFY FILE ( NAME = tempdev , FILENAME = 'E:\MSSQL$SQL2014_2\TempDB\Data\tempdb.mdf' );
-ALTER DATABASE tempdb MODIFY FILE ( NAME = templog , FILENAME = 'E:\MSSQL$SQL2014_2\TempDB\Log\templog.ldf' );
+ALTER DATABASE tempdb MODIFY FILE ( NAME = tempdev , FILENAME = 'D:\MSSQL$CEEMa_PRD\Data\tempdb.mdf' );
+ALTER DATABASE tempdb MODIFY FILE ( NAME = templog , FILENAME = 'D:\MSSQL$CEEMa_PRD\Log\templog.ldf' );
 
 -- Resize existing
 alter database tempdb modify file (name = tempdev, size = 20GB);
@@ -91,8 +91,8 @@ alter database tempdb modify file (name = templog, size = 10GB);
 alter database tempdb modify file (name = templog, filegrowth = 1GB);
 
 -- Add new data files
-alter database tempdb add file (name = tempdb_data2, filename = 'D:\MSSQL$DIAGEO\Data\tempdb_data2.ndf',size = 20GB, filegrowth = 2GB);
-alter database tempdb add file (name = tempdb_data3, filename = 'D:\MSSQL$DIAGEO\Data\tempdb_data3.ndf',size = 20GB, filegrowth = 2GB);
+alter database tempdb add file (name = tempdb_data2, filename = 'D:\MSSQL$CEEMa_PRD\Data\tempdb_data2.ndf',size = 20GB, filegrowth = 2GB);
+alter database tempdb add file (name = tempdb_data3, filename = 'D:\MSSQL$CEEMa_PRD\Data\tempdb_data3.ndf',size = 20GB, filegrowth = 2GB);
 --alter database tempdb add file (name = tempdb_data4, filename = 'E:\MSSQL$SQL2014_2\TempDB\Data\tempdb_data4.ndf',size = 20GB, filegrowth = 2GB);
 
 -- ======================
