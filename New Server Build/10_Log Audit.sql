@@ -24,6 +24,23 @@ GO
 -------------------------------------------------------------
 
 
+
+USE [DBA]
+GO
+/****** Object:  StoredProcedure [dbo].[usp_SQLPerf]    Script Date: 10/09/2015 13:08:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[usp_SQLPerf]
+AS
+	DBCC SQLPERF(logspace)
+
+GO
+-------------------------------------------------------------
+
+
 USE [DBA]
 GO
 
