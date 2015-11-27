@@ -131,3 +131,17 @@ EXEC msdb.dbo.sp_add_alert @name=N'Error 824',
 GO
 EXEC msdb.dbo.sp_add_notification @alert_name=N'Error 824', @operator_name=N'Database notification', @notification_method = 1
 GO
+USE [msdb]
+GO
+
+/* Email when deadlock happens */
+EXEC msdb.dbo.sp_add_alert @name=N'Deadlock Alert', 
+		@message_id=0, 
+		@severity=0, 
+		@enabled=1, 
+		@delay_between_responses=60, 
+		@include_event_description_in=1, 
+		@category_name=N'[Uncategorized]', 
+		@performance_condition=N'Locks|Number of Deadlocks/sec|_Total|>|0', 
+		@job_id=N'00000000-0000-0000-0000-000000000000'
+GO

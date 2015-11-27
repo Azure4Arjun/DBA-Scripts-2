@@ -1,3 +1,5 @@
+SELECT * FROM msdb..sysmail_profile
+
 
 
 -- Enable Database Mail for this instance
@@ -8,29 +10,20 @@ EXEC sp_configure 'Database Mail XPs',1;
 RECONFIGURE;
 GO
  
-
---  Declaring and setting the variables
-
-DECLARE @account_name sysname 					= 'DB12$KC_PRD Mandrill'					-- E.g: DB12 KC_PROD
-,		@displayname nvarchar(128) 				= 'Retail Insight Notifications'		-- Leave Retail Insight Notifications
-,		@acc_desc nvarchar(256) 				= 'DB12$KC_PRD Mandril Mail'				-- E.g: KC_Production
-,		@prf_desc nvarchar(256) 				= 'Mandril DB Mail Profile'				-- E.g: KC_Production
-	
+DECLARE @account_name sysname 					= 'DB10$SQL2008R2(Internal) Localhost'					-- E.g: DB15(Internal) Localhost
+,		@displayname nvarchar(128) 				= '(Internal) - Compass Prod'					-- (Internal) Client- Env name
+,		@acc_desc nvarchar(256) 				= 'DB10$SQL2008R2(Internal) Localhost Mail'				-- E.g: DB15(Internal)
+,		@prf_desc nvarchar(256) 				= 'DB10$SQL2008R2(Internal) Localhost Profile'			-- E.g: DB15(Internal)
 
 -- Mandrill settings
 
 ,		@mailserver_type sysname				= 'SMTP'
-,		@port int								= '587'
-,		@username nvarchar(128)					= 'techops@retailinsight.co.uk'
-,		@password nvarchar(128)					= 'eFfAATBABDqayLUJyW2H7A'
-,		@use_default_credentials sysname		=  0 
-,		@enable_ssl	bit							=  1 
+,		@port int								= '25'
+,		@profile_name sysname 					= 'Internal'									-- E.g: DB12 KC_PRD Database Mail or Internal if for internal purposes
 
-,		@profile_name sysname 					= 'DB12$KC_PRD Mandrill Profile'					-- E.g: DB12 KC_PRD Database Mail
-
-,		@email nvarchar(128)					= 'notifications@retailinsight.co.uk'	-- Must remain the same
-,		@replyto_address nvarchar(128)			= 'noreply@retailinsight.co.uk'			-- Must remain the same
-,		@mailserver_name sysname				= 'smtp.mandrillapp.com'				-- Must remain the same
+,		@email nvarchar(128)					= 'DB10$SQL2008R2@retailinsight.co.uk'					-- Must remain the same
+,		@replyto_address nvarchar(128)			= 'noreply@retailinsight.co.uk'					-- Must remain the same
+,		@mailserver_name sysname				= 'localhost'									-- Must remain the same
 
 
 -- Create a Database Mail profile
@@ -53,11 +46,7 @@ IF NOT EXISTS(SELECT * FROM msdb..sysmail_account WHERE name =  @account_name)
 	  @description             = @acc_desc,
 	  @mailserver_name         = @mailserver_name,
 	  @mailserver_type         = @mailserver_type,
-	  @port                    = @port,
-	  @username                = @username,
-	  @password                = @password,
-	  @use_default_credentials =  0 ,
-	  @enable_ssl              =  1 ;
+	  @port                    = @port
 	END -- IF EXISTS account
 
 
@@ -80,7 +69,7 @@ IF NOT EXISTS(SELECT * FROM msdb..sysmail_profileaccount pa
 EXECUTE msdb.dbo.sysmail_add_principalprofile_sp
     @profile_name = @profile_name,
     @principal_name = 'public',
-    @is_default = 1;
+    @is_default = 0;
 
  
 EXECUTE msdb.dbo.sp_set_sqlagent_properties 
@@ -89,11 +78,10 @@ EXECUTE msdb.dbo.sp_set_sqlagent_properties
 	@use_databasemail=1
 GO
 
--- Pre-SQL2012 version
---EXECUTE msdb.dbo.sp_set_sqlagent_properties 
+--Pre-SQL2012 VERSION
+--EXECUTE msdb.dbo.sp_set_sqlagent_properties  
 --	@email_save_in_sent_folder=1, 
---	email_profile= N'APP4$JDE2012 Mandrill', 
---	@use_databasemail=1
+--	@email_profile= N'Internal', 
 --GO
 
 
@@ -104,7 +92,8 @@ GO
 -- ********************************
 
  DECLARE @test_profile sysname
- SELECT TOP 1 @test_profile = name FROM msdb..sysmail_profile ORDER BY last_mod_datetime
+ SELECT TOP 1 @test_profile = name FROM msdb..sysmail_profile ORDER BY last_mod_datetime desc
+ SELECT @test_profile
 
 EXECUTE msdb.dbo.sp_send_dbmail
 	@profile_name = @test_profile,
@@ -113,7 +102,7 @@ EXECUTE msdb.dbo.sp_send_dbmail
     @query =		'SELECT @@SERVERNAME';
 GO
 
-
+SELECT * FROM msdb..sysmail_profile
 
 --==================
 --Troubleshooting
@@ -122,7 +111,7 @@ select * from msdb.dbo.sysmail_allitems
 ORDER BY send_request_date desc
 
 
-
+    
  SELECT  * FROM msdb..sysmail_profile ORDER BY last_mod_datetime
 
 

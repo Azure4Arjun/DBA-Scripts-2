@@ -8,26 +8,29 @@ EXEC sp_configure 'Database Mail XPs',1;
 RECONFIGURE;
 GO
  
-DECLARE @account_name sysname 					= '712466-DB21(Internal) Mandrill'					-- E.g: DB12 KC_PROD
-,		@displayname nvarchar(128) 				= '(Internal) Retail Insight Notifications'			-- Leave Retail Insight Notifications
-,		@acc_desc nvarchar(256) 				= '712466-DB21(Internal) Mandrill Mail'			-- E.g: KC_Production
-,		@prf_desc nvarchar(256) 				= '(Internal) Mandrill Mail Profile'				-- E.g: KC_Production
+
+--  Declaring and setting the variables
+
+DECLARE @account_name sysname 					= 'DB22$Lavazza_STG Sendgrid'					-- E.g: DB12 KC_PROD
+,		@displayname nvarchar(128) 				= 'Retail Insight Notifications'		-- Leave Retail Insight Notifications
+,		@acc_desc nvarchar(256) 				= 'DB22$Lavazza_STG Sendgrid Mail'				-- E.g: KC_Production
+,		@prf_desc nvarchar(256) 				= 'Sendgrid DB Mail Profile'				-- E.g: KC_Production
 	
 
--- Mandrill settings
+-- Sendgrid settings
 
 ,		@mailserver_type sysname				= 'SMTP'
 ,		@port int								= '587'
-,		@username nvarchar(128)					= 'techops@retailinsight.co.uk'
-,		@password nvarchar(128)					= 'X7YPW8-X1Hr4RsQwyjCfzg'
+,		@username nvarchar(128)					= 'RetailInsight'
+,		@password nvarchar(128)					= 'c21be3eb222db23d39cdbac6a59ea8e0'
 ,		@use_default_credentials sysname		=  0 
 ,		@enable_ssl	bit							=  1 
 
-,		@profile_name sysname 					= 'Internal'								-- E.g: DB12 KC_PRD Database Mail or Internal if for internal purposes
+,		@profile_name sysname 					= 'DB22$Lavazza_STG Sendgrid Profile'					-- E.g: DB12 KC_PRD Database Mail
 
-,		@email nvarchar(128)					= '712466-DB21@retailinsight.co.uk'				-- Must remain the same
-,		@replyto_address nvarchar(128)			= 'noreply@retailinsight.co.uk'						-- Must remain the same
-,		@mailserver_name sysname				= 'smtp.mandrillapp.com'							-- Must remain the same
+,		@email nvarchar(128)					= 'notifications@retailinsight.co.uk'	-- Must remain the same
+,		@replyto_address nvarchar(128)			= 'noreply@retailinsight.co.uk'			-- Must remain the same
+,		@mailserver_name sysname				= 'smtp.sendgrid.net'				-- Must remain the same
 
 
 -- Create a Database Mail profile
@@ -77,7 +80,7 @@ IF NOT EXISTS(SELECT * FROM msdb..sysmail_profileaccount pa
 EXECUTE msdb.dbo.sysmail_add_principalprofile_sp
     @profile_name = @profile_name,
     @principal_name = 'public',
-    @is_default = 0;
+    @is_default = 1;
 
  
 EXECUTE msdb.dbo.sp_set_sqlagent_properties 
@@ -101,7 +104,7 @@ GO
 -- ********************************
 
  DECLARE @test_profile sysname
- SELECT TOP 1 @test_profile = name FROM msdb..sysmail_profile ORDER BY last_mod_datetime desc
+ SELECT TOP 1 @test_profile = name FROM msdb..sysmail_profile ORDER BY last_mod_datetime DESC
  SELECT @test_profile
 
 EXECUTE msdb.dbo.sp_send_dbmail
@@ -111,7 +114,7 @@ EXECUTE msdb.dbo.sp_send_dbmail
     @query =		'SELECT @@SERVERNAME';
 GO
 
-SELECT * FROM msdb..sysmail_profile
+
 
 --==================
 --Troubleshooting

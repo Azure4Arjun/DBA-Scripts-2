@@ -63,10 +63,15 @@ AS
 		IF (@@SERVERNAME = '712468-DB12\KC_PRD' AND @Database = 'PM_ETL') SET @Prevent = 1; -- V8 KC PROD
 		IF (@@SERVERNAME = '712468-DB12\KC_PRD' AND @Database = 'PM_STG') SET @Prevent = 1; -- V8 KC PROD
 
-		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_APP') SET @Prevent = 1;	-- V8 KC PROD
-		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_EDW') SET @Prevent = 1;	-- V8 KC PROD
-		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_ETL') SET @Prevent = 1;	-- V8 KC PROD
-		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_STG') SET @Prevent = 1;	-- V8 KC PROD
+		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_APP') SET @Prevent = 1;	-- V8 JDE PROD
+		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_EDW') SET @Prevent = 1;	-- V8 JDE PROD
+		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_ETL') SET @Prevent = 1;	-- V8 JDE PROD
+		IF (@@SERVERNAME = '657188-DB22' AND @Database = 'PM_STG') SET @Prevent = 1;	-- V8 JDE PROD
+
+		IF (@@SERVERNAME = '657188-DB22\LAVAZZA' AND @Database = 'PM_APP') SET @Prevent = 1;	-- V8 LAVAZZA PROD
+		IF (@@SERVERNAME = '657188-DB22\LAVAZZA' AND @Database = 'PM_EDW') SET @Prevent = 1;	-- V8 LAVAZZA PROD
+		IF (@@SERVERNAME = '657188-DB22\LAVAZZA' AND @Database = 'PM_ETL') SET @Prevent = 1;	-- V8 LAVAZZA PROD
+		IF (@@SERVERNAME = '657188-DB22\LAVAZZA' AND @Database = 'PM_STG') SET @Prevent = 1;	-- V8 LAVAZZA PROD
 		
 		IF (@@SERVERNAME = '691146-DB7' AND @Database = 'OSA_ETL_Framework_Admin')		SET @Prevent = 1; -- SONAE
 		IF (@@SERVERNAME = '691146-DB7' AND @Database = 'OSA_Sonae_Engine')				SET @Prevent = 1; -- SONAE
